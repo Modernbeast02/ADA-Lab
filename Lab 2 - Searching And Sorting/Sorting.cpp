@@ -90,74 +90,50 @@ void InsertionSort(vector<ll> v)
     cout << endl;
 }
 
-void merge(int input[], int left[], int right[], int sizeL, int sizeR)
-{
-    int i = 0;
-    int j = 0;
-    int *output = new int[sizeL + sizeR];
-    int k = 0;
-    while (i < sizeL && j < sizeR)
-    {
-        if (left[i] < right[j])
-        {
-            output[k] = left[i];
-            i++;
-            k++;
-        }
-        else if (left[i] > right[j])
-        {
-            output[k] = right[j];
-            j++;
-            k++;
-        }
-        else if (left[i] == right[j])
-        {
-            output[k] = left[i];
-            output[k + 1] = right[j];
-            i++;
-            j++;
-            k = k + 2;
-        }
-    }
-    while (i < sizeL)
-    {
-        output[k] = left[i];
-        i++;
-        k++;
-    }
-    while (j < sizeR)
-    {
-        output[k] = right[j];
-        j++;
-        k++;
-    }
+void merge(int *arr, int s, int e) {
 
-    for (int i = 0; i < sizeL + sizeR; i++)
-    {
-        input[i] = output[i];
+    int mid = (s+e)/2;
+    int len1 = mid - s + 1;
+    int len2 = e - mid;
+    int *first = new int[len1];
+    int *second = new int[len2];
+    int mainArrayIndex = s;
+    for(int i=0; i<len1; i++) {
+        first[i] = arr[mainArrayIndex++];
+    }
+    mainArrayIndex = mid+1;
+    for(int i=0; i<len2; i++) {
+        second[i] = arr[mainArrayIndex++];
+    } 
+    int index1 = 0;
+    int index2 = 0;
+    mainArrayIndex = s;
+
+    while(index1 < len1 && index2 < len2) {
+        if(first[index1] < second[index2]) {
+            arr[mainArrayIndex++] = first[index1++];
+        }
+        else{
+            arr[mainArrayIndex++] = second[index2++];
+        }
+    }   
+    while(index1 < len1) {
+        arr[mainArrayIndex++] = first[index1++];
+    }
+    while(index2 < len2 ) {
+        arr[mainArrayIndex++] = second[index2++];
     }
 }
 
-void mergeSort(int input[], int size)
-{
-    if (size == 0 || size == 1)
-    {
+void mergeSort(int *arr, int s, int e) {
+    if(s >= e) {
         return;
     }
-    int mid = (size - 1) / 2;
-    int *left = new int[mid + 1];
-    for (int i = 0; i < mid + 1; i++)
-    {
-        left[i] = input[i];
-    }
-    int *right = new int[size - mid - 1];
-    for (int i = 0; i < size - mid - 1; i++)
-    {
-        right[i] = input[mid + 1 + i];
-    }
-    mergeSort(left, mid + 1);
-    mergeSort(right, size - mid - 1);
-    merge(input, left, right, mid + 1, size - mid - 1);
+    int mid = (s+e)/2;
+    mergeSort(arr, s, mid);
+    mergeSort(arr, mid+1, e);
+    merge(arr, s, e);
+
 }
 void Print(vector<ll> v)
 {
@@ -183,11 +159,11 @@ void solve()
     InsertionSort(list);
 
     // Ques 4
-    int input[] = {45, 6, 2, 21, 7, 2};
-    mergeSort(input, 6);
+    int arr[] = {45, 6, 2, 21, 7, 2};
+    mergeSort(arr, 0, 5);
     for (int i = 0; i < 6; i++)
     {
-        cout << input[i] << " ";
+        cout << arr[i] << " ";
     }
     cout << endl;
     
