@@ -89,56 +89,75 @@ void InsertionSort(vector<ll> v)
     cout << "Iterations = " << n - 1 << endl;
     cout << endl;
 }
-void Merge(vector<ll> &v, ll low, ll mid, ll high)
+
+void merge(int input[], int left[], int right[], int sizeL, int sizeR)
 {
-    ll n = mid - low;
-    ll m = high - mid;
-    vector<ll> one, two;
-    for (int i = 0; i < n; i++)
+    int i = 0;
+    int j = 0;
+    int *output = new int[sizeL + sizeR];
+    int k = 0;
+    while (i < sizeL && j < sizeR)
     {
-        one.push_back(v[i + low]);
-    }
-    for (int i = 0; i < m; i++)
-    {
-        two.push_back(v[i + mid]);
-    }
-    ll i = 0, j = 0, k = low;
-    while (i < one.size() && j < two.size())
-    {
-        if (one[i] < two[j])
+        if (left[i] < right[j])
         {
-            v[k] = one[i];
+            output[k] = left[i];
             i++;
+            k++;
         }
-        else
+        else if (left[i] > right[j])
         {
-            v[k] = two[j];
+            output[k] = right[j];
             j++;
+            k++;
         }
-        k++;
+        else if (left[i] == right[j])
+        {
+            output[k] = left[i];
+            output[k + 1] = right[j];
+            i++;
+            j++;
+            k = k + 2;
+        }
     }
-    while (i < one.size())
+    while (i < sizeL)
     {
-        v[k] = one[i];
+        output[k] = left[i];
         i++;
         k++;
     }
-    while (j < two.size())
+    while (j < sizeR)
     {
-        v[k] = two[j];
-        k++;
+        output[k] = right[j];
         j++;
+        k++;
+    }
+
+    for (int i = 0; i < sizeL + sizeR; i++)
+    {
+        input[i] = output[i];
     }
 }
-void MergeSort(vector<ll> &list, ll low, ll high)
+
+void mergeSort(int input[], int size)
 {
-    if (low < high)
+    if (size == 0 || size == 1)
     {
-        ll mid = low + (high - low) / 2;
-        MergeSort(list, low, mid);
-        MergeSort(list, mid + 1, high);
-        Merge(list, low, mid, high);
+        return;
     }
+    int mid = (size - 1) / 2;
+    int *left = new int[mid + 1];
+    for (int i = 0; i < mid + 1; i++)
+    {
+        left[i] = input[i];
+    }
+    int *right = new int[size - mid - 1];
+    for (int i = 0; i < size - mid - 1; i++)
+    {
+        right[i] = input[mid + 1 + i];
+    }
+    mergeSort(left, mid + 1);
+    mergeSort(right, size - mid - 1);
+    merge(input, left, right, mid + 1, size - mid - 1);
 }
 void Print(vector<ll> v)
 {
@@ -164,14 +183,16 @@ void solve()
     InsertionSort(list);
 
     // Ques 4
-    vector<ll> List1 = {7, 8, 18, 27, 56};
-    vector<ll> List2 = {1, 4, 9, 31, 81};
-    vector<ll> mainList = {7, 8, 18, 27, 56, 1, 4, 9, 31, 81};
-    Merge(mainList, 0, 5, 10);
-    Print(mainList);
-
+    int input[] = {45, 6, 2, 21, 7, 2};
+    mergeSort(input, 6);
+    for (int i = 0; i < 6; i++)
+    {
+        cout << input[i] << " ";
+    }
+    cout << endl;
+    
     // Ques 5
-    MergeSort(list, 0, 9);
+    mergeSort(list, 0, 9);
     Print(list);
 }
 int main()
