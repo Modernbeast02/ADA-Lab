@@ -168,8 +168,8 @@ void solve()
     cout << endl;
     
     // Ques 5
-    mergeSort(list, 0, 9);
-    Print(list);
+    int arr[] = {45, 6, 2, 21, 7, 2, 6, 2, 12, 65};
+    mergeSort(arr, 0, 9);
 }
 int main()
 {
