@@ -2,56 +2,54 @@
 using namespace std;
 #define ll long long int
 #define endl '\n'
-int partition(int arr[], int s, int e)
+
+ll partition(vector<ll> &v, ll low, ll high)
 {
-   int pivot = arr[s];
-   int cnt = 0;
-   for (int i = s + 1; i <= e; i++)
-   {
-       if (arr[i] <= pivot)
-           cnt++;
-   }
-   int pivotIndex = s + cnt;
-   swap(arr[pivotIndex], arr[s]);
-   int i = s, j = e;
-   while (i < pivotIndex && j > pivotIndex)
-   {
-       while (arr[i] <= pivot)
-           i++;
-       while (arr[j] > pivot)
-           j--;
-       if (i < pivotIndex && j > pivotIndex)
-           swap(arr[i++], arr[j--]);
-   }
-   return pivotIndex;
+    ll pivot = v[high];
+    ll i = low - 1;
+    for (int j = low; j < high; j++)
+    {
+        if (v[j] <= pivot)
+        {
+            i++;
+            swap(v[i], v[j]);
+        }
+    }
+    swap(v[i + 1], v[high]);
+    return i + 1;
 }
-void quickSort(int arr[], int s, int e)
+void Quicksort(vector<ll> &v, ll low, ll high)
 {
-   if (s >= e)
-       return;
-   int p = partition(arr, s, e);
-   quickSort(arr, s, p - 1);
-   quickSort(arr, p + 1, e);
+    if (low < high)
+    {
+        ll par = partition(v, low, high);
+        Quicksort(v, low, par - 1);
+        Quicksort(v, par + 1, high);
+    }
 }
 void solve()
 {
-   int arr[10] = {2, 4, 1, 6, 9, 15, 10, 9, 11, 9};
-   int n = 10;
-   quickSort(arr, 0, n - 1);
-   cout << "Sorted Array using Quicksort - \n";
-   for (int i = 0; i < n; i++)
-       cout << arr[i] << " ";
-   cout << endl;
-   //Time complexity= O(NlogN)
-   //Worst case complexity = O(N^2)
+    ll n;
+    cin >> n;
+    vector<ll> v(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> v[i];
+    }
+    Quicksort(v, 0, n - 1);
+    for (int i = 0; i < n; i++)
+    {
+        cout << v[i] << " ";
+    }
+    cout << endl;
 }
 int main()
 {
-   ios_base::sync_with_stdio(false);
-   cin.tie(NULL);
-   int t = 1;
-   // cin >> t;
-   while (t--)
-       solve();
-   return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t = 1;
+    // cin >> t;
+    while (t--)
+        solve();
+    return 0;
 }
